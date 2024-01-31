@@ -56,7 +56,7 @@ export async function updateRoom(roomId, roomData) {
     formData.append("roomPrice", roomData.roomPrice)
     formData.append("image", roomData.image)
 
-    const res = await api.put(`/api/rooms/update/${roomId}`)
+    const res = await api.put(`/api/rooms/update/${roomId}`, formData)
     return res
 }
 

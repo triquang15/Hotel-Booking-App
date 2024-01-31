@@ -19,6 +19,7 @@ export const EditRoom = () => {
     const selectedImage = e.target.files[0]
     setRoom({ ...room, image: selectedImage })
     setImagePreview(URL.createObjectURL(selectedImage))
+    console.log("Image", selectedImage);
   }
 
   const handleInputChange = (e) => {
@@ -94,9 +95,8 @@ export const EditRoom = () => {
                         <img src={`data:image/*;base64, ${imagePreview}`} style={{maxWidth: '400px', maxHeight: '400px'}} className='mb-3' alt="Room Image" />
                     )}
                 </div>
-                <div className='d-grid gap-2 d-md-flex mt-2'>
-                
-                    <button type='submit' className='btn btn-outline-warning'> 
+                <div className='d-grid gap-2 d-md-flex mt-2'>               
+                    <button type='submit' className='btn btn-outline-success'> 
                        Update
                     </button>
                     <Link to={"/rooms"} className='btn btn-outline-danger ml-5'>Cancel</Link>
