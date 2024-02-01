@@ -6,8 +6,8 @@ export const RoomPage = ({currentPage, totalPages, onPageChange}) => {
     <nav>
         <ul className='pagination justify-content-center'>
             {pageNumbers.map((pageNum) => (
-                <li className={`page-item ${currentPage === pageNum ? "active" : ""}`} key={pageNum}>
-                    <button className='page-link' onClick={() => onPageChange(pageNum)}>
+                <li className={`page-item  ${currentPage === pageNum ? "active" : ""}`} key={pageNum}>
+                    <button className='page-link ' onClick={() => onPageChange(pageNum)}>
                         {pageNum}
                     </button>
                 </li>

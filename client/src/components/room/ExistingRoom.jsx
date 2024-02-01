@@ -80,7 +80,7 @@ export const ExistingRoom = () => {
             {errorMes && <p className='alert alert-danger mt-5'>{errorMes}</p>}
         </div>
             {isLoading ? (
-                <p>Loading rooms</p>
+                <p>Loading ...</p>
             ) : (
                 <>
                     <div className='mt-5 mb-5 container'>
@@ -107,7 +107,7 @@ export const ExistingRoom = () => {
                                         <tr key={room.id} className='text-center'>
                                             <td>#{room.id}</td>
                                             <td>{room.roomType}</td>
-                                            <td>{room.roomPrice}</td>
+                                            <td>${room.roomPrice}</td>
                                             <td>
                                             <img src={`data:image/*;base64, ${room.image}`} style={{maxWidth: '100px', maxHeight: '100px'}} className='mb-3' alt="Room Image" />
                                             </td>

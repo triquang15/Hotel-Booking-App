@@ -1,9 +1,16 @@
 import React from 'react'
+import { Header } from '../layout/Header'
+import { HotelService } from '../common/HotelService'
+import { Parallax } from '../common/Parallax'
 
 export const Home = () => {
   return (
-    <div>
-        <h2>Welcome to Hotel</h2>
-    </div>
+    <section>
+        <Header/>
+        <section className='container'>
+        <Parallax/>
+            <HotelService/>
+        </section>
+    </section>
   )
 }
