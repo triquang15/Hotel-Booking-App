@@ -26,7 +26,7 @@ export const RoomFilter = ({ data, setFilterData }) => {
                 <option key={index} value={String(type)}>{String(type)}</option>
             ))}
         </select>
-        <button className="btn btn-hotel" type="button" onClick={clearFilter}>Clear Filter</button>
+        <button className="btn btn-hotel" type="button" onClick={clearFilter}>Clear</button>
     </div>
     );
 };
