@@ -33,7 +33,7 @@ import com.triquang.model.BookedRoom;
 import com.triquang.model.Room;
 import com.triquang.response.BookingResponse;
 import com.triquang.response.RoomResponse;
-import com.triquang.service.BookingService;
+import com.triquang.service.BookingServiceImpl;
 import com.triquang.service.IRoomService;
 
 @RestController
@@ -45,7 +45,7 @@ public class RoomController {
 	private IRoomService roomService;
 
 	@Autowired
-	private BookingService bookingService;
+	private BookingServiceImpl bookingService;
 
 	@PostMapping("/addNewRoom")
 	public ResponseEntity<RoomResponse> addNewRooma(@RequestParam("image") MultipartFile image,

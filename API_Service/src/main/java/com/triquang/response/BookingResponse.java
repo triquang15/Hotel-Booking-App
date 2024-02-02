@@ -21,7 +21,7 @@ public class BookingResponse {
 	private String numOfAdults;
 	private String totalNumOfGuest;
 	private String bookingCode;
-	private Room room;
+	private RoomResponse room;
 
 	public BookingResponse(Long id, LocalDate checkIn, LocalDate checkOut, String bookingCode) {
 		super();
