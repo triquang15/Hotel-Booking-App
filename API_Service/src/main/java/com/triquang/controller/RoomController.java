@@ -4,16 +4,20 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.Blob;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import javax.sql.rowset.serial.SerialBlob;
 import javax.sql.rowset.serial.SerialException;
 
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -95,8 +99,7 @@ public class RoomController {
 
 	@PutMapping("/update/{roomId}")
 	public ResponseEntity<RoomResponse> updateRoom(@PathVariable Long roomId,
-			@RequestParam(required = false) String roomType, 
-			@RequestParam(required = false) BigDecimal roomPrice,
+			@RequestParam(required = false) String roomType, @RequestParam(required = false) BigDecimal roomPrice,
 			@RequestParam(required = false) MultipartFile image) throws IOException, SerialException, SQLException {
 
 		byte[] photoBytes = image != null && !image.isEmpty() ? image.getBytes() : roomService.getRoomImageById(roomId);
@@ -118,12 +121,65 @@ public class RoomController {
 		}).orElseThrow(() -> new ResourceNotFoundException("Room not found"));
 	}
 
+//	@GetMapping("/available-rooms")
+//	public ResponseEntity<List<RoomResponse>> getRoomAvailable(
+//			@RequestParam("checkIn") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkIn,
+//			@RequestParam("checkOut") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkOut,
+//			@RequestParam("roomType") String roomType) {
+//		List<Room> availableRoom = roomService.getAvailableRooms(checkIn, checkOut, roomType);
+//		List<RoomResponse> roomResponses = new ArrayList<>();
+//		for (Room room : availableRoom) {
+//			byte[] photoBytes = roomService.getRoomImageById(room.getId());
+//			if (photoBytes != null && photoBytes.length > 0) {
+//				String imageBase64 = Base64.encodeBase64String(photoBytes);
+//				RoomResponse roomResponse = getRoomResponse(room);
+//				roomResponse.setImage(imageBase64);
+//				roomResponses.add(roomResponse);
+//			}
+//		}
+//		if (roomResponses.isEmpty()) {
+//			return ResponseEntity.noContent().build();
+//		} else {
+//			return ResponseEntity.ok(roomResponses);
+//		}
+//
+//	}
+	
+	@GetMapping("/available-rooms")
+	public ResponseEntity<List<RoomResponse>> getRoomAvailable(
+	        @RequestParam("checkIn") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkIn,
+	        @RequestParam("checkOut") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkOut,
+	        @RequestParam("roomType") String roomType) {
+	    List<Room> availableRoom = roomService.getAvailableRooms(checkIn, checkOut, roomType);
+
+	    List<RoomResponse> roomResponses = availableRoom.stream()
+	            .map(room -> {
+	                byte[] photoBytes = roomService.getRoomImageById(room.getId());
+	                if (photoBytes != null && photoBytes.length > 0) {
+	                    String imageBase64 = Base64.encodeBase64String(photoBytes);
+	                    RoomResponse roomResponse = getRoomResponse(room);
+	                    roomResponse.setImage(imageBase64);
+	                    return roomResponse;
+	                }
+	                return null;
+	            })
+	            .filter(Objects::nonNull)
+	            .collect(Collectors.toList());
+
+	    if (roomResponses.isEmpty()) {
+	        return ResponseEntity.noContent().build();
+	    } else {
+	        return ResponseEntity.ok(roomResponses);
+	    }
+	}
+
+
 	private RoomResponse getRoomResponse(Room room) {
 		List<BookedRoom> bookedRooms = getAllBookingByRoomId(room.getId());
-//		List<BookingResponse> bookingResponses = bookedRooms.stream()
-//				.map(booking -> new BookingResponse(booking.getId(), booking.getCheckIn(), booking.getCheckOut(),
-//						booking.getBookingCode()))
-//				.toList();
+		List<BookingResponse> bookingResponses = bookedRooms.stream()
+				.map(booking -> new BookingResponse(booking.getId(), booking.getCheckIn(), booking.getCheckOut(),
+						booking.getConfirmCode()))
+				.toList();
 		byte[] imageBytes = null;
 		Blob blobImage = room.getImage();
 		if (blobImage != null) {
@@ -133,7 +189,8 @@ public class RoomController {
 				throw new ImageRetrievalException("Error get image response");
 			}
 		}
-		return new RoomResponse(room.getId(), room.getRoomType(), room.getRoomPrice(), room.isBooked(), imageBytes);
+		return new RoomResponse(room.getId(), room.getRoomType(), room.getRoomPrice(), room.isBooked(), imageBytes,
+				bookingResponses);
 	}
 
 	private List<BookedRoom> getAllBookingByRoomId(Long roomId) {

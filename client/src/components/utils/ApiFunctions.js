@@ -12,7 +12,7 @@ export async function addNewRoom(image, roomType, roomPrice) {
     formData.append("roomPrice", roomPrice)
 
     const res = await api.post("/api/rooms/addNewRoom", formData)
-    if(res.status === 201 || res.status === 200) {
+    if (res.status === 201 || res.status === 200) {
         return true
     } else {
         return false
@@ -30,7 +30,7 @@ export async function getRoomType() {
 }
 
 /** This function get all rooms*/
-export async function getAllRooms(){
+export async function getAllRooms() {
     try {
         const res = await api.get("/api/rooms/allRooms")
         return res.data
@@ -76,7 +76,7 @@ export async function bookRoom(roomId, booking) {
         const response = await api.post(`/api/bookings/room/${roomId}/booking`, booking)
         return response.data
     } catch (error) {
-        if(error.response && error.response.data) {
+        if (error.response && error.response.data) {
             throw new Error(error.response.data)
         } else {
             throw new Error(`Error booking room ${error.message}`)
@@ -100,7 +100,7 @@ export async function getBookingConfirmCode(confirmCode) {
         const response = await api.get(`/api/bookings/confirm/${confirmCode}`)
         return response.data
     } catch (error) {
-        if(error.response && error.response.data) {
+        if (error.response && error.response.data) {
             throw new Error(error.response.data)
         } else {
             throw new Error(`Error find booking ${error.message}`)
@@ -116,4 +116,10 @@ export async function cancelBooking(bookingId) {
     } catch (error) {
         throw new Error(`Error canceling booking ${error.message}`)
     }
+}
+
+/** This function get Available Rooms */
+export async function getAvailableRooms(checkIn, checkOut, roomType) {
+    const result = await api.get(`/api/rooms/available-rooms?checkIn=${checkIn}&checkOut=${checkOut}&roomType=${roomType}`)
+    return result
 }

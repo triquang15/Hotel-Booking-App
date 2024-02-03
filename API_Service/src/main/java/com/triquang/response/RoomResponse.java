@@ -23,14 +23,14 @@ public class RoomResponse {
 		this.roomPrice = roomPrice;
 	}
 
-	public RoomResponse(Long id, String roomType, BigDecimal roomPrice, boolean isBooked, byte[] imageBytes) {
+	public RoomResponse(Long id, String roomType, BigDecimal roomPrice, boolean isBooked, byte[] imageBytes, List<BookingResponse> bookings) {
 		super();
 		this.id = id;
 		this.roomType = roomType;
 		this.roomPrice = roomPrice;
 		this.isBooked = isBooked;
 		this.image = imageBytes != null ? Base64.encodeBase64String(imageBytes) : null;
-	//	this.bookings = bookings;
+		this.bookings = bookings;
 	}
 
 }

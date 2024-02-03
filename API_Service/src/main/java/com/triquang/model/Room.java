@@ -35,6 +35,8 @@ public class Room {
 	private String roomType;
 	private BigDecimal roomPrice;
 	private boolean isBooked = false;
+	private String roomName;
+	private String description;
 	
 	@Lob
 	private Blob image;

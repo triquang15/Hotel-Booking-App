@@ -35,7 +35,7 @@ export const Bookings = () => {
         <HeaderPage title={"Manage Bookings"}/> <br />
         {error && (<div className='text-danger'>{error}</div>)}
         {isLoading ? (
-            <div className='text-danger'>Loading bookings</div>
+            <div className='text-danger'>Loading bookings...</div>
         ): (
             <BookingTable bookingInfo={bookingInfo} handleCancelBooking={handleBookingCancellation}/>
         )}

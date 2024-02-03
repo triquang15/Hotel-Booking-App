@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.triquang.exception.InvalidBookingRequestException;
+import com.triquang.exception.ResourceNotFoundException;
 import com.triquang.model.BookedRoom;
 import com.triquang.model.Room;
 import com.triquang.repository.BookingRepository;
@@ -67,7 +68,8 @@ public class BookingServiceImpl implements IBookingService {
 	@Override
 	public BookedRoom findByConfirmCode(String confirmCode) {
 
-		return bookingRepository.findByConfirmCode(confirmCode);
+		return bookingRepository.findByConfirmCode(confirmCode)
+				.orElseThrow(() -> new ResourceNotFoundException("No booking found with booking code: " + confirmCode));
 	}
 
 	@Override

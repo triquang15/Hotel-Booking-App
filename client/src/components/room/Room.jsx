@@ -30,7 +30,7 @@ export const Room = () => {
     }
 
     if (error) {
-        return <div className='text-danger'>Fetching Error {error}</div>
+        return <div className='text-danger'>{error}</div>
     }
 
     const handlePageChange = (pageNumber) => {
