@@ -7,7 +7,8 @@ export const Admin = () => {
         <br />
         <h2 className='text-center'>Welcome to Admin Panel</h2>
         <hr />
-        <Link to={'/add-room'}>Manage Rooms</Link>
+        <Link to={'/rooms'} className='btn btn-primary'>Manage Rooms</Link>&nbsp;&nbsp;
+        <Link to={'/bookings'} className='btn btn-primary'>Manage Bookings</Link>    
     </section>
   )
 }

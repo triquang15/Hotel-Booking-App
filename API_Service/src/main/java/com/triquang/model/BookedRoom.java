@@ -35,13 +35,13 @@ public class BookedRoom {
 	private String guestEmail;
 	
 	@Column(name = "children")
-	private String numOfChildren;
+	private int numOfChildren;
 	
 	@Column(name = "adults")
-	private String numOfAdults;
+	private int numOfAdults;
 	
 	@Column(name = "total_guest")
-	private String totalNumOfGuest;
+	private int totalNumOfGuest;
 	
 	@Column(name = "code")
 	private String confirmCode;
@@ -50,17 +50,17 @@ public class BookedRoom {
 	@JoinColumn(name = "room_id")
 	private Room room;
 
-	public void setNumOfChildren(String numOfChildren) {
+	public void setNumOfChildren(int numOfChildren) {
 		this.numOfChildren = numOfChildren;
 		calTotalNumberOfGuest();
 	}
 
-	public void setNumOfAdults(String numOfAdults) {
+	public void setNumOfAdults(int numOfAdults) {
 		this.numOfAdults = numOfAdults;
 		calTotalNumberOfGuest();
 	}
 
 	public void calTotalNumberOfGuest() {
-		this.totalNumOfGuest = this.numOfAdults + this.numOfChildren;
+		this.totalNumOfGuest = this.numOfAdults + numOfChildren;
 	}
 }

@@ -1,7 +1,8 @@
 import moment from 'moment'
 import React, { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Button } from 'react-bootstrap'
+import { getRoomById } from '../utils/ApiFunctions';
 
 export const BookingSummary = ({ booking, payment, isFormValid, onConfirm }) => {
     const checkIn = moment(booking.checkIn)
@@ -10,6 +11,11 @@ export const BookingSummary = ({ booking, payment, isFormValid, onConfirm }) => 
     const [isBookingConfirmed, setIsBookingConfirmed] = useState(false)
     const [isProcessPayment, setIsProcessPayment] = useState(false)
 
+    const [error, setError] = useState()
+    const [isLoading, setIsLoading] = useState(true)
+    const [roomInfo, setRoomInfo] = useState({image: "", roomType: "", roomPrice: ""})
+
+    const {roomId} = useParams()
     const navigate = useNavigate()
 
     const handleConfirmBooking = () => {
@@ -27,22 +33,35 @@ export const BookingSummary = ({ booking, payment, isFormValid, onConfirm }) => 
         }
     }, [isBookingConfirmed, navigate])
 
+    useEffect(() => {
+        setTimeout (() => {
+          getRoomById(roomId).then((res) => {
+            setRoomInfo(res)
+            setIsLoading(false)
+          }).catch((error) => {
+            setError(error)
+            setIsLoading(false)
+          })
+        }, 2000)
+      }, [roomId])
+
     return (
         <div className='card card-body mt-5'>
-            <h3>Your booking details</h3>
+            <h3 className='text-center'>Your booking details</h3>
+            <p>Room Type: <strong>{roomInfo.roomType}</strong></p>
             <p>Lead Guests: <strong>{booking.guestFullName}</strong></p>
             <p>Email: <strong>{booking.guestEmail}</strong></p>
             <p>Check-in: <strong>{moment(booking.checkIn).format("MMM Do YYYY")}</strong> From 15:00</p>
             <p>Check-out: <strong>{moment(booking.checkOut).format("MMM Do YYYY")}</strong> Until 12:00</p>
             <p>Reservation: 1 room, <strong>{numOfDays}</strong> night</p>
             <div>
-                <h5>Number of Guests</h5>
+                <legend>Number of Guests</legend>
                 <strong>Adult{booking.numOfAdults > 1 ? "s" : ""} : {booking.numOfAdults}</strong> &nbsp;&nbsp;
                 <strong>Children: {booking.numOfChildren}</strong>
             </div>
             {payment > 0 ? (
-                <>
-                    <p>Your price summary: <strong>${payment}</strong></p>
+                <> <br />
+                    <legend>Your price summary: <strong>${payment}</strong></legend>
                     {isFormValid && !isBookingConfirmed ? (
                         <Button variant='primary' onClick={handleConfirmBooking}>
                             {isProcessPayment ? (

@@ -80,7 +80,7 @@ export const ExistingRoom = () => {
             {errorMes && <p className='alert alert-danger mt-5'>{errorMes}</p>}
         </div>
             {isLoading ? (
-                <p>Loading ...</p>
+                <p className='text-danger'>Loading Rooms...</p>
             ) : (
                 <>
                     <div className='mt-5 mb-5 container'>
