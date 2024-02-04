@@ -37,8 +37,8 @@ import com.triquang.model.BookedRoom;
 import com.triquang.model.Room;
 import com.triquang.response.BookingResponse;
 import com.triquang.response.RoomResponse;
-import com.triquang.service.BookingServiceImpl;
 import com.triquang.service.IRoomService;
+import com.triquang.service.impl.BookingServiceImpl;
 
 @RestController
 @RequestMapping("/api/rooms")

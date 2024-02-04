@@ -1,4 +1,4 @@
-package com.triquang.service;
+package com.triquang.service.impl;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -18,6 +18,7 @@ import com.triquang.exception.InternalServerException;
 import com.triquang.exception.ResourceNotFoundException;
 import com.triquang.model.Room;
 import com.triquang.repository.RoomRepository;
+import com.triquang.service.IRoomService;
 
 @Service
 public class RoomServiceImpl implements IRoomService {

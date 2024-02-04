@@ -1,4 +1,4 @@
-package com.triquang.service;
+package com.triquang.service.impl;
 
 import java.util.List;
 
@@ -10,6 +10,8 @@ import com.triquang.exception.ResourceNotFoundException;
 import com.triquang.model.BookedRoom;
 import com.triquang.model.Room;
 import com.triquang.repository.BookingRepository;
+import com.triquang.service.IBookingService;
+import com.triquang.service.IRoomService;
 
 @Service
 public class BookingServiceImpl implements IBookingService {
