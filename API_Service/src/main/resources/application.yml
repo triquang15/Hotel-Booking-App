@@ -1,24 +1,33 @@
+auth:
+  token:
+    jwtExpirationTime: 3600000
+    jwtSecret: 36763979244226452948404D635166546A576D5A7134743777217A25432A462D
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: DEBUG
+        type:
+          descriptor:
+            sql:
+              BasicBinder: TRACE
 server:
   port: 8080
-   
 spring:
   datasource:
-    username: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
     password: 12345678
     url: jdbc:mysql://localhost:3306/hotel_booking
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
   jpa:
-    show-sql: true
     hibernate:
       ddl-auto: update
-      format_sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: true
+    show-sql: true
   servlet:
     multipart:
-      max-file-size: 5MB
-      max-request-size: 5MB
-      file-size-threshold: 2KB
-        
-        
-        
-  
-  
+      max-file-size: 500KB
+      max-request-size: 500KB

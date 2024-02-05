@@ -22,7 +22,6 @@ import com.triquang.service.IRoleService;
 
 @RestController
 @RequestMapping("/api/roles")
-@CrossOrigin("http://localhost:3000")
 public class RoleController {
 
 	@Autowired
@@ -43,7 +42,7 @@ public class RoleController {
 		}
 	}
 
-	@DeleteMapping("/delete{roleId}")
+	@DeleteMapping("/delete/{roleId}")
 	public void deleteRole(@PathVariable Long roleId) {
 		roleService.deleteRole(roleId);
 	}

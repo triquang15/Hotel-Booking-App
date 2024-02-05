@@ -30,13 +30,13 @@ public class RoleServiceImpl implements IRoleService {
 	}
 
 	@Override
-	public Role createRole(Role role) {
-		String roleName = "ROLE_" + role.getName().toUpperCase();
-		Role theRole = new Role(roleName);
-		if (roleRepository.existsByName(theRole)) {
-			throw new RoleException(role.getName() + " role already exists");
+	public Role createRole(Role theRole) {
+		String roleName = "ROLE_" + theRole.getName().toUpperCase();
+		Role role = new Role(roleName);
+		if (roleRepository.existsByName(roleName)) {
+			throw new RoleException(theRole.getName() + " role already exists");
 		}
-		return roleRepository.save(theRole);
+		return roleRepository.save(role);
 	}
 
 	@Override

@@ -21,9 +21,6 @@ export const BookingTable = ({bookingInfo, handleCancelBooking}) => {
         setFilteredBooking(bookingInfo)
     },[bookingInfo])
 
-
-    console.log('filterBookings',bookingInfo);
-
   return (
     <section className='p-4'>
         <DateSlider onDataChange={filterBookings} onFilterChange={filterBookings}/>

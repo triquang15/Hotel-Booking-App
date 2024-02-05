@@ -4,11 +4,15 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -22,8 +26,10 @@ public class Role {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
 	private String name;
 
+	@JsonBackReference
 	@ManyToMany(mappedBy = "roles")
 	private Collection<User> users = new HashSet<>();
 
@@ -45,7 +51,7 @@ public class Role {
 	}
 
 	public String getName() {
-		return name != null ? name : "";
+		return name != null? name : "";
 	}
 
 	public Role(String name) {

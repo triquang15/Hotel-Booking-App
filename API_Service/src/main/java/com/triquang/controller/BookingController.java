@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,7 +27,6 @@ import com.triquang.service.IRoomService;
 
 @RestController
 @RequestMapping("/api/bookings")
-@CrossOrigin("http://localhost:3000")
 public class BookingController {
 
 	@Autowired
@@ -35,6 +35,7 @@ public class BookingController {
 	@Autowired
 	private IRoomService iRoomService;
 
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@GetMapping("/all-bookings")
 	public ResponseEntity<List<BookingResponse>> getAllBookingRooms() {
 		List<BookedRoom> bookedRooms = iBookingService.getAllBookings();
