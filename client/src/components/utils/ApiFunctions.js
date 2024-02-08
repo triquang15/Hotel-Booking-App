@@ -4,6 +4,14 @@ export const api = axios.create({
     baseURL: "http://localhost:8080"
 })
 
+export const getHearder = () => {
+    const token = localStorage.getItem("token")
+    return {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+    }
+}
+
 /** This function add new room */
 export async function addNewRoom(image, roomType, roomPrice) {
     const formData = new FormData()
@@ -122,4 +130,80 @@ export async function cancelBooking(bookingId) {
 export async function getAvailableRooms(checkIn, checkOut, roomType) {
     const result = await api.get(`/api/rooms/available-rooms?checkIn=${checkIn}&checkOut=${checkOut}&roomType=${roomType}`)
     return result
+}
+
+/** This function register user */
+export async function signUp(dataReq) {
+    try {
+        const response = await api.post('/api/auth/register', dataReq)
+        return response.data
+    } catch (error) {
+        if (error.response && error.response.data) {
+            throw new Error(error.response.data)
+        } else {
+            throw new Error(`Error ${error.message}`)
+        }
+    }
+}
+
+/** This function login user */
+export async function signIn(login) {
+    try {
+        const response = await api.post('/api/auth/login', login)
+        if (response.status >= 200 && response.status < 300) {
+            return response.data
+        } else {
+            return null
+        }
+    } catch (error) {
+        console.error(error)
+        return null
+    }
+}
+
+/** This function get User Profile */
+export async function getUserProfile(userId, token) {
+    try {
+        const response = await api.get(`/api/users/profile/${userId}`, {
+            headers: getHearder()
+        })
+        return response.data
+    } catch (error) {
+        throw error
+    }
+}
+
+export async function deleteUser(userId){
+    try {
+        const response = await api.delete(`/api/user/delete/${userId}`,{
+            headers: getHearder()
+        })
+        return response.data
+    } catch (error) {
+        return error.message
+    }
+}
+
+export async function getUser(userId, token) {
+    try {
+        const response = await api.get(`/api/users/${userId}`, {
+            headers: getHearder()
+        })
+        return response.data
+    } catch (error) {
+        throw error
+    }
+}
+
+/* This is the function to get user bookings by the user id */
+export async function getBookingsByUserId(userId, token) {
+	try {
+		const response = await api.get(`/api/bookings/user/${userId}/bookings`, {
+			headers: getHearder()
+		})
+		return response.data
+	} catch (error) {
+		console.error("Error fetching bookings:", error.message)
+		throw new Error("Failed to fetch bookings")
+	}
 }

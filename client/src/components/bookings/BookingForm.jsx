@@ -11,19 +11,15 @@ export const BookingForm = () => {
     const [isSubmited, setIsSubmited] = useState(false)
     const [errorMessage, setErrorMessage] = useState("")
     const [roomPrice, setRoomPrice] = useState(0)
+    const currentUser = localStorage.getItem("userId");
+
     const [booking, setBooking] = useState({
         guestFullName: "",
-        guestEmail: "",
+        guestEmail: currentUser,
         numOfChildren: "",
         numOfAdults: "",
         checkIn: "",
         checkOut: ""
-    })
-
-    const [roomInfo, setRoomInfo] = useState({
-        image: "",
-        roomType: "",
-        roomPrice: ""
     })
 
     const { roomId } = useParams()
@@ -49,12 +45,12 @@ export const BookingForm = () => {
     }, [roomId])
 
     const calculatePayment = () => {
-        const checkIn = moment(booking.checkIn);
-        const checkOut = moment(booking.checkOut);
-        const diffInDays = checkOut.diff(checkIn, "days");
-        const price = roomPrice ? roomPrice : 0;
-        return diffInDays * price;
-    }
+		const checkInDate = moment(booking.checkIn)
+		const checkOutDate = moment(booking.checkOut)
+		const diffInDays = checkOutDate.diff(checkInDate, "days")
+		const paymentPerDay = roomPrice ? roomPrice : 0
+		return diffInDays * paymentPerDay
+	}
     
     const isGuestCountValid = () => {
         const adultCount = parseInt(booking.numOfAdults)
@@ -65,7 +61,7 @@ export const BookingForm = () => {
 
     const isCheckOutDateValid = () => {
         if (!moment(booking.checkOut).isSameOrAfter(moment(booking.checkIn))) {
-            setErrorMessage("Check-in date must be before check-out date!")
+            setErrorMessage("Check-out date must be after check-in date!")
             return false
         } else {
             setErrorMessage("")
@@ -91,6 +87,7 @@ export const BookingForm = () => {
             navigate("/booking-success", { state: { message: confirmCode } })
         } catch (error) {
             const errorMessage = error.message
+            console.log(errorMessage)
             navigate("/booking-success", { state: { error: errorMessage } })
         }
     }
@@ -126,7 +123,8 @@ export const BookingForm = () => {
                                         <div className='col-6'>
                                             <FormLabel htmlFor='checkIn'>Check-In (*)</FormLabel>
                                             <FormControl required type='date' id='checkIn' name='checkIn'
-                                                value={booking.checkIn} placeholder='Check-In Date' onChange={handleInputChange} />
+                                                value={booking.checkIn} placeholder='Check-In Date'
+                                                min={moment().format("MMM Do, YYYY")} onChange={handleInputChange} />
                                             <Feedback type='invalid'>
                                                 Please select check-in date
                                             </Feedback>
@@ -135,7 +133,8 @@ export const BookingForm = () => {
                                         <div className='col-6'>
                                             <FormLabel htmlFor='checkOut'>Check-Out (*)</FormLabel>
                                             <FormControl required type='date' id='checkOut' name='checkOut'
-                                                value={booking.checkOut} placeholder='Check-Out Date' onChange={handleInputChange} />
+                                                value={booking.checkOut} placeholder='Check-Out Date' 
+                                                min={moment().format("MMM Do, YYYY")} onChange={handleInputChange} />
                                             <Feedback type='invalid'>
                                                 Please select check-out date
                                             </Feedback>

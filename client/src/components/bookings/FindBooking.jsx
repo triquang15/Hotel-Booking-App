@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { cancelBooking, getBookingConfirmCode } from '../utils/ApiFunctions'
+import moment from "moment"
 
 export const FindBooking = () => {
     const [confirmCode, setConfimCode] = useState("")
@@ -97,16 +98,16 @@ export const FindBooking = () => {
                 ) : bookingInfo.bookingCode ? (
                     <div className='col-md-6 mt-4 mb-5'>
                         <h3>Booking Information</h3>
-                        <p>Confirmation Code {bookingInfo.bookingCode}</p>
-                        <p>Booking Id {bookingInfo.id}</p>
-                        <p>Room Type {bookingInfo.room.roomType}</p>
-                        <p>Check-in date {bookingInfo.checkIn}</p>
-                        <p>Check-out date {bookingInfo.checkOut}</p>
-                        <p>Guest Name {bookingInfo.guestFullName}</p>
-                        <p>Guest Email {bookingInfo.guestEmail}</p>
-                        <p>Adults {bookingInfo.numOfAdults}</p>
-                        <p>Chldren {bookingInfo.numOfChildren}</p>
-                        <p>Total Guests {bookingInfo.totalNumOfGuest}</p>
+                        <p>Confirmation Code: {bookingInfo.bookingCode}</p>
+                        <p>Booking Id: {bookingInfo.id}</p>
+                        <p>Room Type: {bookingInfo.room.roomType}</p>
+                        <p>Check-in date: {" "} {moment(bookingInfo.checkIn).subtract(1, "month").format("MMM Do, YYYY")}</p>
+                        <p>Check-out date: {" "} {moment(bookingInfo.checkOut).subtract(1, "month").format("MMM Do, YYYY")}</p>
+                        <p>Guest Name: {bookingInfo.guestFullName}</p>
+                        <p>Guest Email: {bookingInfo.guestEmail}</p>
+                        <p>Adults: {bookingInfo.numOfAdults}</p>
+                        <p>Chldren: {bookingInfo.numOfChildren}</p>
+                        <p>Total Guests: {bookingInfo.totalNumOfGuest}</p>
 
                         {!isDeleted && (
                             <button className='btn btn-danger' onClick={() => handleCancelBooking(bookingInfo.id)}>Cancel Booking</button>

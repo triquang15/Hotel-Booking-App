@@ -2,12 +2,11 @@ package com.triquang.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,19 +33,18 @@ public class BookingController {
 
 	@Autowired
 	private IRoomService iRoomService;
-
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	
 	@GetMapping("/all-bookings")
 	public ResponseEntity<List<BookingResponse>> getAllBookingRooms() {
-		List<BookedRoom> bookedRooms = iBookingService.getAllBookings();
-		List<BookingResponse> bookingResponses = new ArrayList<>();
-		for (BookedRoom room : bookedRooms) {
-			BookingResponse bookingResponse = getBookingResponse(room);
-			bookingResponses.add(bookingResponse);
-		}
+	    List<BookedRoom> bookedRooms = iBookingService.getAllBookings();
+	    
+	    List<BookingResponse> bookingResponses = bookedRooms.stream()
+	        .map(this::getBookingResponse)
+	        .collect(Collectors.toList());
 
-		return ResponseEntity.ok(bookingResponses);
+	    return ResponseEntity.ok(bookingResponses);
 	}
+
 
 	@GetMapping("/confirm/{confirmCode}")
 	public ResponseEntity<?> getBookingConfirmCode(@PathVariable String confirmCode) {
@@ -79,6 +77,18 @@ public class BookingController {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
 	}
+	
+	 @GetMapping("/user/{email}/bookings")
+	 public ResponseEntity<List<BookingResponse>> getBookingsByUserEmail(@PathVariable String email) {
+		    List<BookedRoom> bookings = iBookingService.getBookingsByUserEmail(email);
+		    
+		    List<BookingResponse> bookingResponses = bookings.stream()
+		        .map(this::getBookingResponse)
+		        .collect(Collectors.toList());
+
+		    return ResponseEntity.ok(bookingResponses);
+		}
+
 
 	@DeleteMapping("/{bookingId}/delete")
 	public void cancelBooking(@PathVariable Long bookingId) {
