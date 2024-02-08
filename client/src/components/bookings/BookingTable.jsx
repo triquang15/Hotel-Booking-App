@@ -24,7 +24,7 @@ export const BookingTable = ({bookingInfo, handleCancelBooking}) => {
 
   return (
     <section className='p-4'>
-        <DateSlider onDataChange={filterBookings} onFilterChange={filterBookings}/>
+        <DateSlider onDateChange={filterBookings} onFilterChange={filterBookings}/>
         <table className='table table-bodered table-hover showdow'>
             <thead>
                 <tr>
